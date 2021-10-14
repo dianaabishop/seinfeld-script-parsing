@@ -27,7 +27,7 @@ Now you're ready to run the script!
 `cd seinfeld-script-parsing` 
 `python parse_scripts.py`
 
-This should annotate all of the scripts and write the labeled files to the `processed_scripts` folder
+This should annotate all of the scripts and write the labeled files to the `processed_scripts` folder. It also creates a json file with a final count for each question/aux combo in the `process_scripts` dir named `final_counts.json`.
 
 If you would just like to test the script, you can run it in test mode by doing the following. Running the script in test mode will use a limited subset of test questions (contained in test_question_list.json) and only on one file (the first file that is returned from the directory search). 
 `python parse_scripts.py --test True`
