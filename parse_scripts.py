@@ -1,4 +1,5 @@
 from os import walk
+import json
 
 
 combined_question_list = [{"label":"whatis", "question": "what's"}, {"label": "whatis", "question":"what is", "question_word":"what", "aux":"is"}]
@@ -16,6 +17,9 @@ def get_file_names():
 
 def main():
     script_file_names = get_file_names()
+
+    f = open('combined_question_list.json',)
+    combined_question_list = json.load(f)
 
     for path in script_file_names:
         for q in combined_question_list: 
