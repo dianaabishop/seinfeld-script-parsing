@@ -95,6 +95,9 @@ def main():
                 contents = "".join(contents)
                 f.write(contents)
 
+    # write the final question counts to a json file in processed_scripts
+    with open('./processed_scripts/final_counts.json', 'w') as f:
+        json.dump(label_count_dict, f, ensure_ascii=False, indent=4)
 
 if __name__ == '__main__':
 	main()
