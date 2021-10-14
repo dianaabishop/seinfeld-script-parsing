@@ -1,6 +1,8 @@
 # Seinfeld Script Parsing
 
 ### What Does This Do?
+This script iterates through the text files contained in the `scripts` directory and annotates them when question word combinations are found (e.g. "what is", "where does"). It gets these question words (and contractions) to check from the `combined_question_list.json` file and keeps count of occurances across script files. 
+
 
 ### How To Run The Script
 Git clone the repository onto your local computer with:
@@ -27,5 +29,16 @@ Now you're ready to run the script!
 
 This should annotate all of the scripts and write the labeled files to the `processed_scripts` folder
 
+If you would just like to test the script, you can run it in test mode by doing the following. Running the script in test mode will use a limited subset of test questions (contained in test_question_list.json) and only on one file (the first file that is returned from the directory search). 
+`python parse_scripts.py --test True`
 
-### How to make edits
+You can also run the full list of questions on a specific script file by doing the following:
+`python parse_scripts.py --file "S1_E1.txt"`
+
+Some potentially useful helper scripts:
+* Create empty files - may not be that useful now that they've all be transferred to text already, but I added this so I could create empty files and just paste the text into them. To run:
+`./create_files.sh -s SEASON_NUM -n NUM_EPISODES`
+e.g. `./create_files.sh -s 1 -n 23` - will create 23 empty text files in the `scripts` folder in the format `S1_E1.txt`
+
+* Delete processed files - this deletes all files from the processed_scripts directory; simple, but helpful for testing. To run:
+`./delete_processed_files.sh`
