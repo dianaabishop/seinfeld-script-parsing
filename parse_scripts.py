@@ -1,9 +1,7 @@
 from os import walk
 import json
 
-
-combined_question_list = [{"label":"whatis", "question": "what's"}, {"label": "whatis", "question":"what is", "question_word":"what", "aux":"is"}]
-punctuation = [".","?","!"]
+PUNCTUATION_LIST = [".","?","!"]
 
 def get_file_names():
     '''
@@ -16,15 +14,23 @@ def get_file_names():
 
 
 def main():
-    script_file_names = get_file_names()
+    # script_file_names = get_file_names()
+    script_file_names = ["S3_E12.txt"]
 
-    f = open('combined_question_list.json',)
+    # f = open('combined_question_list.json',)
+    f = open('test_question_list.json',)
     combined_question_list = json.load(f)
 
-    for path in script_file_names:
-        for q in combined_question_list: 
+    label_count_dict = {}
+
+    for file_name in script_file_names:
+        for i, q in enumerate(combined_question_list): 
+
+            if not label_count_dict.get(q["label"]):
+                label_count_dict[q["label"]] = 0
             # open file and read all lines into contents
-            with open(path, "r") as f:
+            p = './scripts/{}'.format(file_name) if i == 0  else './processed_scripts/{}'.format(file_name)
+            with open(p, "r") as f:
                 contents = f.readlines()
 
             idx_list = []
@@ -32,33 +38,36 @@ def main():
             # iterate through the file lines, check against the question words/phrases
             # if the question is found, note the index and increment the num occurances
             for idx, c in enumerate(contents):
-                if q["question"] in c.lower(): 
-                    num_occurances = num_occurances + 1
+                utf_string = c.decode('utf-8')
+                if q["question"] in utf_string.lower(): 
+                    num_occurances += 1
                     idx_list.append({"index":idx, "num_occ":num_occurances})
                     
-                split_line = c.split(" ")
+                split_line = utf_string.split(" ")
                 # check that there is no punctuation and that the final word is the question word
-                if q.get("question_word"," ") in split_line[-1] and not any(map(split_line[-1].__contains__, punctuation)):
+                if q.get("question_word"," ") in split_line[-1] and not any(map(split_line[-1].__contains__, PUNCTUATION_LIST)):
                     # check if last word is in the single question word list
                     empty_line = True
                     count = 1
                     while empty_line:
-                        line = c[idx+count]   
-                        if line:
-                            if q.get("aux", " ") in line[0]:
+                        line = contents[idx+count]  
+                        if line != "\n":
+                            new_split_line = line.strip().split(" ")
+                            if q.get("aux", " ") in new_split_line[0]:
+                                num_occurances += 1
                                 idx_list.append({"index":idx, "num_occ":num_occurances})
-                                empty_line = False
+                            empty_line = False
                         else: 
                             count += 1
 
             # insert label into text file on relelvant row
             # in the format: ***whatis1 (e.g. question + occurance #)
             add_to_index = 0
-            for idx in idx_list:
-                contents.insert(idx["index"]+add_to_index, "***{}{}".format(q["label"],idx["num_occ"]))
+            for index in idx_list:
+                contents.insert(index["index"]+add_to_index, "***{}{}".format(q["label"],index["num_occ"]))
                 add_to_index += 1
 
-            with open(path, "w") as f:
+            with open("./processed_scripts/{}".format(file_name), "w") as f:
                 contents = "".join(contents)
                 f.write(contents)
 
