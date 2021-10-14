@@ -14,11 +14,11 @@ def get_file_names():
 
 
 def main():
-    # script_file_names = get_file_names()
-    script_file_names = ["S3_E12.txt"]
+    script_file_names = get_file_names()
+    # script_file_names = ["S3_E12.txt"]
 
-    # f = open('combined_question_list.json',)
-    f = open('test_question_list.json',)
+    f = open('combined_question_list.json',)
+    # f = open('test_question_list.json',)
     combined_question_list = json.load(f)
 
     label_count_dict = {}
@@ -71,13 +71,6 @@ def main():
                 contents = "".join(contents)
                 f.write(contents)
 
-    # if the last word in a line is a question word, have
-    # to check the first word of the next line
-    
-    # need to remove empty newlines if there wasn't punctuation at the end of the previous line, 
-    # or just check when doing the multiline check
-    # add some logic to ignore it if it gets run more than once
-    # add some logic to add new question combos with command line arguments?
 
 if __name__ == '__main__':
 	main()
