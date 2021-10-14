@@ -1,7 +1,25 @@
 from os import walk
 import json
+import argparse
 
 PUNCTUATION_LIST = [".","?","!"]
+
+'''
+add command line arguments for passing optional parameters
+'''
+parser = argparse.ArgumentParser()
+
+parser.add_argument('-t', '--test', action='store', dest='test',
+                    required=False, type=bool, metavar='<>',
+                    help='Runs the script on a shorter list of questions and one script file')
+
+parser.add_argument('-f', '--file', action='store',dest='file',
+                    required=False, type=str, metavar='<>',
+                    help='Enter a specific script to run the test on')
+
+results = parser.parse_args()
+FILE = results.file
+TEST_RUN = results.test
 
 def get_file_names():
     '''
@@ -15,11 +33,17 @@ def get_file_names():
 
 def main():
     script_file_names = get_file_names()
-    # script_file_names = ["S3_E12.txt"]
 
-    f = open('combined_question_list.json',)
-    # f = open('test_question_list.json',)
+    if TEST_RUN:
+        script_file_names = [script_file_names[0]]
+        f = open('test_question_list.json',)
+    else:
+        f = open('combined_question_list.json',)
+
     combined_question_list = json.load(f)
+
+    if FILE: 
+        script_file_names = [FILE]
 
     label_count_dict = {}
 
