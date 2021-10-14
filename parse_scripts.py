@@ -40,8 +40,8 @@ def main():
             for idx, c in enumerate(contents):
                 utf_string = c.decode('utf-8')
                 if q["question"] in utf_string.lower(): 
-                    num_occurances += 1
-                    idx_list.append({"index":idx, "num_occ":num_occurances})
+                    label_count_dict[q["label"]] += 1
+                    idx_list.append({"index":idx, "num_occ":label_count_dict[q["label"]]})
                     
                 split_line = utf_string.split(" ")
                 # check that there is no punctuation and that the final word is the question word
@@ -54,8 +54,8 @@ def main():
                         if line != "\n":
                             new_split_line = line.strip().split(" ")
                             if q.get("aux", " ") in new_split_line[0]:
-                                num_occurances += 1
-                                idx_list.append({"index":idx, "num_occ":num_occurances})
+                                label_count_dict[q["label"]] += 1
+                                idx_list.append({"index":idx, "num_occ":label_count_dict[q["label"]]})
                             empty_line = False
                         else: 
                             count += 1
