@@ -559,7 +559,7 @@ THE BUSBOY
 
                
                              KRAMER
-               �Habla espanol?
+               eHabla espanol?
 
                
                              GEORGE
@@ -571,7 +571,7 @@ THE BUSBOY
 
                
                              KRAMER
-               �Como se dice.. waterbed?
+               eComo se dice.. waterbed?
 
                
                              GEORGE
@@ -586,7 +586,7 @@ THE BUSBOY
 
                
                              KRAMER
-               You got anything to drink? �Agua?
+               You got anything to drink? eAgua?
 
                
                              GEORGE

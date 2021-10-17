@@ -64,7 +64,7 @@ def main():
             if QUESTION and not q["question_word"] == QUESTION:
                 continue
 
-            if EXCLUDE_QUESTION and q["question_word"] == QUESTION:
+            if EXCLUDE_QUESTION and q["question_word"] == EXCLUDE_QUESTION:
                 continue
 
             if not label_count_dict.get(q["label"]):
@@ -85,9 +85,11 @@ def main():
                     label_count_dict[q["label"]] += 1
                     idx_list.append({"index":idx, "num_occ":label_count_dict[q["label"]]})
 
-                    previous_line = "" if idx == 1 else contents[idx-1].decode('utf-8').strip(" ").replace("\\r\\n", " ")
+                    # we also add to a list of context for easy perusal in CSV form later
+                    previous_line = "" if idx == 0 else contents[idx-1].decode('utf-8').strip(" ").replace("\\r\\n", " ")
                     following_line = "" if idx + 1 > contents_len else contents[idx+1].decode('utf-8').strip(" ").replace("\\r\\n", " ")
-                    question = "{} {} {}".format(previous_line ,contents[idx].strip(" ").replace("\\r\\n", " "), following_line)
+                    current_line = contents[idx].decode('utf-8').strip(" ").replace("\\r\\n", " ")
+                    question = "{} {} {}".format(previous_line, current_line, following_line)
                     context_list.append({"episode": file_name, "question_and_context": question.replace("\n", ""), "label": "***{}{}".format(q["label"],label_count_dict[q["label"]])})
                     
                 split_line = utf_string.split(" ")
@@ -103,6 +105,11 @@ def main():
                             if q.get("aux", " ") in new_split_line[0]:
                                 label_count_dict[q["label"]] += 1
                                 idx_list.append({"index":idx, "num_occ":label_count_dict[q["label"]]})
+                                # we also add to a list of context for easy perusal in CSV form later
+                                first_line = split_line[-1].decode('utf-8').strip(" ").replace("\\r\\n", " ")
+                                following_line = line.decode('utf-8').strip(" ").replace("\\r\\n", " ")
+                                question = "{} {}".format(previous_line, following_line)
+                                context_list.append({"episode": file_name, "question_and_context": question.replace("\n", ""), "label": "***{}{}".format(q["label"],label_count_dict[q["label"]])})
                             empty_line = False
                         else: 
                             count += 1
